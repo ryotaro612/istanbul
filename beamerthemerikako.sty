@@ -1,0 +1,16 @@
+\mode<presentation>
+% luatextja-presetは警告を出す。和書を多書体であつかう。
+% matchは「pLaTEX 2𝜀 新ドキュメントクラス」のように \rmfamily, \textrm{...}, \sffamily 等が欧文フォントだけでなく和文フォントも変更する。
+% luatexja-presetを使うと和文がリスケールscale=0.96..される。
+\RequirePackage[match,no-math,scale=0.96221923828125]{luatexja-fontspec}
+\RequirePackage{xcolor}
+\RequirePackage{bookmark}
+% mathrm=symがないと数式中\sinがLMになった。mainfontと同じになるらしい
+% mathrm=sym,mathup=sym,mathit=sym,mathsf=sym,mathbf=sym,mathtt=sym
+\RequirePackage[mathrm=sym]{unicode-math}
+%\RequirePackage{amsmath}
+\useoutertheme{rikako}
+\useinnertheme{rikako}
+\usefonttheme{rikako}
+\usecolortheme{rikako}
+\mode<all>

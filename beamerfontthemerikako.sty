@@ -1,0 +1,11 @@
+% BoldFontなどの設定参照 https://texdoc.org/serve/fontspec/0
+% \setmainjfont[BoldFont=HiraMinPro-W6]{HiraMinPro-W3}
+\setsansfont{Helvetica Neue}
+% ゴシック体をデフォルトにする別の方法
+%\renewcommand{\kanjifamilydefault}{\gtdefault}
+%\renewcommand{\emph}[1]{{\upshape\bfseries #1}}
+\setmainjfont{Hiragino Sans}
+\setmathfont{STIX Two Math}
+\setmonofont{JetBrainsMono}
+\setmonojfont{SourceHanCodeJP}
+ \AtBeginBibliography{\small \fontspec{Times New Roman}\jfontspec{HiraMinProN-W3}}

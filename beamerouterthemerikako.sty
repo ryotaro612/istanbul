@@ -1,0 +1,10 @@
+% ページの左右のマージン
+\setbeamersize{text margin left=0.05\paperwidth,text margin right=0.05\paperwidth} 
+\setbeamertemplate{frametitle}{
+  \nointerlineskip % ヘッダの上の小さい白を消す
+  \begin{beamercolorbox}[wd=\paperwidth,dp=0.05\paperheight, ht=0.09\paperheight, leftskip=0.05\paperwidth, rightskip=0.05\paperwidth]{frametitle}
+    \insertframetitle
+  \end{beamercolorbox}
+}
+% ページをまたぐ場合に、表題の末尾にインデックスをつけない
+\setbeamertemplate{frametitle continuation}{}

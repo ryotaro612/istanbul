@@ -1,0 +1,112 @@
+% unicodeは、hyperrefへの指定で、pdfのメタデータにあるタイトルの文字化けを防ぐ
+\documentclass[unicode, 14pt]{beamer} 
+\usepackage{listings}
+\usepackage{bussproofs}
+\usepackage[backend=biber, style=ieee]{biblatex}
+\usetheme{rikako}
+\addbibresource{demo.bib}
+\title{はじめてのrunc}
+\author{中村 遼太郎}
+\begin{document}
+
+\begin{frame}[noframenumbering, plain]
+\titlepage
+\end{frame}
+\section{導入}
+\begin{frame}[t]
+  \frametitle{runcってなに}
+  低レベルなコンテナランタイムとそのCLI
+  % 左にレイヤの図。右に箇条書
+\end{frame}
+\begin{frame}[t]
+  \frametitle{コンテナを起動}
+  コマンドを実行すれば低レベルさがみえる
+  % コンテナを起動するコード
+\end{frame}
+\begin{frame}[t]
+  \frametitle{runcの実装}
+  runcは既存の小さなコンポーネントを再利用
+  % Principle
+\end{frame}
+\begin{frame}[t]
+  \frametitle{runc runの手続き}
+  runが生成したinitがコンテナになる
+\end{frame}
+\section{runc run}
+\begin{frame}[t]
+  \end{frame}
+\section{runc init}
+
+\begin{frame}[t]
+  \frametitle{a}
+\end{frame}
+% runcの寄贈
+% https://www.docker.com/blog/runc/
+% https://www.docker.com/blog/containerd-vs-docker/
+% https://docs.docker.com/engine/daemon/alternative-runtimes/
+\section{特徴}
+\begin{frame}[t]
+  \frametitle{特徴}
+    単純なスライドにした。\textit{abc}
+  \vspace{0.2\paperheight}
+  \begin{itemize}
+    \item 右下のnavigationを無効化\href{https://google.com}{doge}
+    \item 各セクションの先頭に自動で目次を挿入
+    \item frameが複数のスライドにまたいでも\\タイトルの末尾に番号をつけない
+  \end{itemize}
+\end{frame}
+
+% \section{フォント}
+
+\begin{frame}
+\frametitle{採用したフォント}
+\begin{itemize}
+\item ヒラギノ
+\item Helvetica Neue
+\item Source Han Code JP
+\item JetBrains Mono
+\item STIX2
+\end{itemize}
+\end{frame}
+
+\section{デモ}
+
+\begin{frame}
+  \frametitle{数式の例}
+  \begin{equation}
+    e^{i\theta} = \cos\theta + i\sin \theta \mathrm{sin}
+  \end{equation}
+\end{frame}
+
+\begin{frame}
+  \frametitle{導出木の例}
+  \begin{prooftree}
+    \AxiomC{$P \to Q$}
+    \AxiomC{$P$}
+    \BinaryInfC{$Q$}
+  \end{prooftree}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{コード}
+  {\small 
+    \begin{lstlisting}[language=C++]
+#include<bits/stdc++.h>
+using namespace std;
+
+int main() {
+  cout << "Hello World!" << endl;
+  return 0;
+}
+    \end{lstlisting}
+}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{参考文献の表示例}
+  \printbibliography
+  % 引用していないbibファイルの要素も記載する  
+  \nocite{*} 
+\end{frame}
+
+\end{document}
