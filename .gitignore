@@ -1,5 +1,10 @@
 # Latex
 *.aux
 *.bcf
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
 # Emacs
 *~
