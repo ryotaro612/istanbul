@@ -6,5 +6,12 @@
 *.fdb_latexmk
 *.fls
 *.log
+*.pdf
+*.run.xml
+*.snm
+*.toc
+*.vrb
+*.nav
+*.synctex.gz
 # Emacs
 *~
