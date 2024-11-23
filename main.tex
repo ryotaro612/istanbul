@@ -4,7 +4,7 @@
 % https://www.cpt.univ-mrs.fr/~masson/latex/Beamer-appearance-cheat-sheet.pdf
 \documentclass[unicode, 14pt, aspectratio=169]{beamer} 
 \usepackage{listings}
-\usepackage{bussproofs}
+\usepackage{minted}
 \usepackage[backend=biber, style=ieee]{biblatex}
 \usetheme{rikako}
 \date{\number\year 年\number\month 月\number\day 日}
@@ -14,26 +14,28 @@
 \author{中村 遼太郎}
 \begin{document}
 
+\usemintedstyle{xcode}
 \begin{frame}[noframenumbering, plain]
 \titlepage
 \end{frame}
 \section{導入}
 \begin{frame}[t]
   \frametitle{runcってなに}
-  低レベルなコンテナランタイムと、そのCLI\cite{containerd-vs-docker}
+  低レベルなコンテナランタイムのCLI
   % 左にレイヤの図。右に箇条書
   % images/containerd-diagram-v1.png
   \begin{figure}
     \centering
-    \includegraphics[width=5cm]{images/containerd-diagram-v1.png}
-    \caption{Docker, runc, OSの階層\footnote{\scriptsize{図を\href{https://www.docker.com/blog/containerd-vs-docker}{containerd vs. Docker: Understanding Their Relationship and How They Work Together}より引用}}}
+    \includegraphics[width=6.5cm]{images/containerd-diagram-v1.png}
+    \caption{Docker, runc, OSの階層\footnote{\scriptsize{\href{https://www.docker.com/blog/containerd-vs-docker}{containerd vs. Docker: Understanding Their Relationship and How They Work Together}より}}}
     \label{runc}
   \end{figure}
 \end{frame}
 \begin{frame}[t]
-  \frametitle{コンテナを起動}
-  コマンドを実行すれば低レベルさがみえる
+  \frametitle{dockerより低レベル}
+  \texttt{docker export}の出力からコンテナを起動\supercite{containerd-vs-docker}
   % コンテナを起動するコード
+  \inputminted[fontsize=\small]{sh}{code/run.sh}
 \end{frame}
 \begin{frame}[t]
   \frametitle{runcの実装}
@@ -97,15 +99,6 @@
   \begin{equation}
     e^{i\theta} = \cos\theta + i\sin \theta \mathrm{sin}
   \end{equation}
-\end{frame}
-
-\begin{frame}
-  \frametitle{導出木の例}
-  \begin{prooftree}
-    \AxiomC{$P \to Q$}
-    \AxiomC{$P$}
-    \BinaryInfC{$Q$}
-  \end{prooftree}
 \end{frame}
 
 \begin{frame}[fragile]
