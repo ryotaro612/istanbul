@@ -8,3 +8,9 @@
 }
 % ページをまたぐ場合に、表題の末尾にインデックスをつけない
 \setbeamertemplate{frametitle continuation}{}
+% footlineはouter
+% https://www.beamer.plus/Inner-Themes-Outer-Themes-Templates.html
+\setbeamertemplate{footline}{
+  \hfill\insertframenumber\hspace{0.05\paperwidth}
+  \vspace{0.025\paperheight}
+}
