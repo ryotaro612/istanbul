@@ -3,8 +3,8 @@
 % チートシート
 % https://www.cpt.univ-mrs.fr/~masson/latex/Beamer-appearance-cheat-sheet.pdf
 \documentclass[unicode, 14pt, aspectratio=169]{beamer} 
-\usepackage{listings}
 \usepackage{minted}
+\usepackage{listings}
 \usepackage[backend=biber, style=ieee]{biblatex}
 \usetheme{rikako}
 \date{\number\year 年\number\month 月\number\day 日}
@@ -28,14 +28,19 @@
     \centering
     \includegraphics[width=6.5cm]{images/containerd-diagram-v1.png}
     \caption{Docker, runc, OSの階層\footnote{\scriptsize{\href{https://www.docker.com/blog/containerd-vs-docker}{containerd vs. Docker: Understanding Their Relationship and How They Work Together}より}}}
-    \label{runc}
+    \label{fig:runc}
   \end{figure}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}[fragile=singleslide]
   \frametitle{dockerより低レベル}
-  \texttt{docker export}の出力からコンテナを起動\supercite{containerd-vs-docker}
-  % コンテナを起動するコード
-  \inputminted[fontsize=\small]{sh}{code/run.sh}
+  \texttt{docker export}の出力からコンテナを起動 \supercite{containerd-vs-docker}
+  % \lstinputlisting[language=sh,title=Python example,basicstyle=\footnotesize ]{code/run.sh}
+  %
+  \begin{center}
+    \inputminted[fontsize=\footnotesize]{sh}{code/run.sh}
+    runcでコンテナを起動\supercite{runc}  
+  \end{center}
+
 \end{frame}
 \begin{frame}[t]
   \frametitle{runcの実装}
@@ -101,20 +106,20 @@
   \end{equation}
 \end{frame}
 
-\begin{frame}[fragile]
-\frametitle{コード}
-  {\small 
-    \begin{lstlisting}[language=C++]
-#include<bits/stdc++.h>
-using namespace std;
+% \begin{frame}[fragile]
+% \frametitle{コード}
+%   {\small 
+%     \begin{lstlisting}[language=C++]
+% #include<bits/stdc++.h>
+% using namespace std;
 
-int main() {
-  cout << "Hello World!" << endl;
-  return 0;
-}
-    \end{lstlisting}
-}
-\end{frame}
+% int main() {
+%   cout << "Hello World!" << endl;
+%   return 0;
+% }
+%     \end{lstlisting}
+% }
+% \end{frame}
 
 \begin{frame}[allowframebreaks]
   \frametitle{参考資料}
