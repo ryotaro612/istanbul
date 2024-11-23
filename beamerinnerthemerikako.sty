@@ -38,19 +38,19 @@
 
 % Footnote
 
-\setbeamertemplate{footline}{
-  \hfill\insertframenumber\hspace{0.05\paperwidth}
-  \vspace{0.025\paperheight}
-}
 % remove navigation symbols 
 \usenavigationsymbolstemplate{}
 
 % 図や表の見出しにcaption: やimage: をつけない
 \setbeamertemplate{caption}{\insertcaption}
 % キャプションと図や表の間隔を小くする 0ptでもくっつかない
-\setlength{\abovecaptionskip}{0pt} 
+\setlength{\abovecaptionskip}{0pt}
 
-% href
+% https://tex.stackexchange.com/questions/96501/what-does-relax-do
+% footnoteの上のruleを消す
+% relaxはなにもしない命令
+\let\footnoterule\relax
+
 \newcommand{\colorhref}[2]{\href{#1}{\color{link}{#2}}}
 
 % Bibliography
