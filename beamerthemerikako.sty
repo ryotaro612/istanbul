@@ -1,6 +1,12 @@
+% メモ
+% チートシート
+% https://www.cpt.univ-mrs.fr/~masson/latex/Beamer-appearance-cheat-sheet.pdf
+% ptは細かい指定はできないらしい
+% unicodeは、hyperrefへの指定で、pdfのメタデータにあるタイトルの文字化けを防ぐ
+% \documentclass[unicode, 14pt]{beamer} 
 \mode<presentation>
 % luatextja-presetは警告を出す。和書を多書体であつかう。
-% matchは「pLaTEX 2𝜀 新ドキュメントクラス」のように \rmfamily, \textrm{...}, \sffamily 等が欧文フォントだけでなく和文フォントも変更する。
+% matchは「pLaTEX 2e 新ドキュメントクラス」のように \rmfamily, \textrm{...}, \sffamily 等が欧文フォントだけでなく和文フォントも変更する。
 % luatexja-presetを使うと和文がリスケールscale=0.96..される。
 \RequirePackage[match,no-math,scale=0.96221923828125]{luatexja-fontspec}
 \RequirePackage{xcolor}
