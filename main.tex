@@ -5,6 +5,8 @@
 \documentclass[unicode, 14pt, aspectratio=169]{beamer} 
 \usepackage{minted}
 \usepackage{listings}
+\usepackage{xcolor}
+\usepackage{textcomp}
 \usepackage[backend=biber, style=ieee]{biblatex}
 \usetheme{rikako}
 \date{\number\year 年\number\month 月\number\day 日}
@@ -14,7 +16,7 @@
 \author{中村 遼太郎}
 \begin{document}
 
-\usemintedstyle{xcode}
+\usemintedstyle{titech}
 \begin{frame}[noframenumbering, plain]
 \titlepage
 \end{frame}
@@ -23,7 +25,6 @@
   \frametitle{runcってなに}
   低レベルなコンテナランタイムのCLI
   % 左にレイヤの図。右に箇条書
-  % images/containerd-diagram-v1.png
   \begin{figure}
     \centering
     \includegraphics[width=6.5cm]{images/containerd-diagram-v1.png}
@@ -32,15 +33,15 @@
   \end{figure}
 \end{frame}
 \begin{frame}[fragile=singleslide]
-  \frametitle{dockerより低レベル}
-  \texttt{docker export}の出力からコンテナを起動 \supercite{containerd-vs-docker}
-  % \lstinputlisting[language=sh,title=Python example,basicstyle=\footnotesize ]{code/run.sh}
-  %
+  \frametitle{イメージはいらない}
+  コンテナのルート\texttt{/}があればいい
   \begin{center}
     \inputminted[fontsize=\footnotesize]{sh}{code/run.sh}
-    runcでコンテナを起動\supercite{runc}  
+    runcでコンテナの\texttt{sh}を開始\supercite{runc}  
   \end{center}
-
+  \begin{lstlisting}[language=C++]
+  \end{lstlisting}
+  
 \end{frame}
 \begin{frame}[t]
   \frametitle{runcの実装}
