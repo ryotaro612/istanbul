@@ -14,7 +14,8 @@
 *.nav
 *.synctex.gz
 _minted-*
-*.bbl-SAVE-ERROR
+*-SAVE-ERROR
+
 # Python
 venv
 # Emacs

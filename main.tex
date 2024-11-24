@@ -23,7 +23,7 @@
 \section{導入}
 \begin{frame}[t]
   \frametitle{runcってなに}
-  低レベルなコンテナランタイムのCLI
+  後にDockerから独立した低レベルなコンテナランタイムのCLI
   % 左にレイヤの図。右に箇条書
   \begin{figure}
     \centering
@@ -39,18 +39,26 @@
     \inputminted[fontsize=\footnotesize]{sh}{code/run.sh}
     runcでコンテナの\texttt{sh}を開始\supercite{runc}  
   \end{center}
-  \begin{lstlisting}[language=C++]
-  \end{lstlisting}
-  
 \end{frame}
 \begin{frame}[t]
-  \frametitle{runcの実装}
-  runcは既存の小さなコンポーネントを再利用
-  % Principle
+  \frametitle{runcの設計}
+  runcの実装はUNIXプログラミング
+  \begin{center}
+    Infrastructure Plumbing Manifesto\footnote{\scriptsize{Dockerのブログ \href{https://www.docker.com/blog/runc/}{Introducing runC: a lightweight universal container runtime
+}より引用}}
+    \end{center}
+  \begin{quote}
+    \begin{itemize}
+    \item {\small When you need to create new plumbing, make it easy to re-use and contribute improvements back.}
+    \item {\small Follow the unix principles: several simple components are better than a single, complicated one.}
+    \item {\small Define standard interfaces which can be used to combine many simple components into a more sophisticated system.}
+  \end{itemize}
+  \end{quote}
 \end{frame}
 \begin{frame}[t]
   \frametitle{runc runの手続き}
-  runが生成したinitがコンテナになる
+  runが実行したrunc initがコンテナになる
+  % 図を入れる
 \end{frame}
 \section{runc run}
 \begin{frame}[t]

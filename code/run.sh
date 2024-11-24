@@ -5,5 +5,4 @@ docker export $(docker create busybox) | tar -C rootfs -xvf -
 runc spec
 # コンテナIDをcidとしてコンテナを起動
 runc --root /tmp/runc run cid
-# /bin/shを開始し、/が出力される
-
+# /bin/shを実行中のコンテナにアタッチ
