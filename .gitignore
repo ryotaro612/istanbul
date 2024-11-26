@@ -15,7 +15,6 @@
 *.synctex.gz
 _minted-*
 *-SAVE-ERROR
-
 # Python
 venv
 # Emacs
