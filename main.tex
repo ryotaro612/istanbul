@@ -56,7 +56,6 @@
   \end{itemize}
   \end{quote}
 \end{frame}
-\section{runc run}
 \begin{frame}[t]
   \frametitle{runc runの手続き}
   runが実行したrunc initがコンテナになる
@@ -67,6 +66,7 @@
     \label{fig:fuga}
   \end{figure}
 \end{frame}
+\section{コンテナの構造体}
 \begin{frame}[t]
   \frametitle{libcontainer.Container}
   フィールドは非公開
@@ -95,7 +95,6 @@
   % _LIBCONTAINER_FIFOFD=でつたえる
   % fifoは、fifoではなくfd/以下のファイルを親プロセスでは読みにいってスタートしたか調べる。
   % fdの説明
-  
 \end{frame}
 \begin{frame}[t]
   プロセスの非機能を隔離、監視\supercite{rdt}する
@@ -121,19 +120,33 @@
     libcontainer.Container\supercite{libcontainer}
   \end{center}
 \end{frame}
-\section{runc init}
+\section{アタッチしたコンテナとホスト間の標準IO}
 \begin{frame}[t]
-  \frametitle{疑似端末のつくりかた}
+  \frametitle{疑似端末の準備}
   \texttt{runc init}は\texttt{runc run}に疑似端末のマスタを送る
   \setlist[enumerate]{label*=\arabic*.,ref=\arabic*}
   
   \begin{enumerate}[leftmargin=1.2cm]
-  \item \texttt{run}は\texttt{socketpair}で通信できる2つのファイル記述子をつくる
+  \item \texttt{run}は\texttt{socketpair}でファイル記述子のペアをつくる。ペアは双方向通信できる
   \item \texttt{run}はCmd.ExtraFilesで記述子を1つ\texttt{init}にわたす 
-  \item \texttt{init}は\texttt{/dev/ptmx}をひらき、疑似端末のマスタ/スレーブのファイル記述子をつくる。入力は他方への書き込みになる。
+  \item \texttt{init}は\texttt{/dev/ptmx}をひらき、疑似端末のマスタ/スレーブのファイル記述子をつくる。入力は他方への書き込みになる
   \item \texttt{init}はsendmsgでマスタを\texttt{run}に送る
   \item \texttt{run}はもらったマスタの入出力を標準IOにコピーする
   \end{enumerate}
+\end{frame}
+\begin{frame}[t]
+  \frametitle{\texttt{init}がマスタを\texttt{run}に送る}
+  \begin{center}
+    \inputminted{go}{code/tty_init.go}
+    \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/init_linux.go\#L371}{\texttt{setupConsole}}関数の抜粋
+  \end{center}
+\end{frame}
+\begin{frame}[t]
+  \frametitle{a}
+  \begin{center}
+    \inputminted{go}{code/tty_run.go}
+    \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/init_linux.go\#L371}{\texttt{setupConsole}}関数の抜粋
+  \end{center}
 \end{frame}
 % runcの寄贈
 % https://www.docker.com/blog/runc/
@@ -141,7 +154,7 @@
 % https://docs.docker.com/engine/daemon/alternative-runtimes/
 \begin{frame}[t]
   \frametitle{名前つきパイプ}
-  container_linuxのincludeExec
+  % container_linuxのincludeExec
 \end{frame}
 
 \begin{frame}[allowframebreaks]
