@@ -135,17 +135,19 @@
   \end{enumerate}
 \end{frame}
 \begin{frame}[t]
-  \frametitle{\texttt{init}がマスタを\texttt{run}に送る}
+  \frametitle{\texttt{init}}
+  マスタを\texttt{run}に送る
   \begin{center}
     \inputminted{go}{code/tty_init.go}
     \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/init_linux.go\#L371}{\texttt{setupConsole}}関数の抜粋
   \end{center}
 \end{frame}
 \begin{frame}[t]
-  \frametitle{a}
+  \frametitle{\texttt{run}}
+  標準入力を\texttt{ptmx}に書き、\texttt{ptmx}の出力を標準出力に送る
   \begin{center}
     \inputminted{go}{code/tty_run.go}
-    \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/init_linux.go\#L371}{\texttt{setupConsole}}関数の抜粋
+    \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/tty.go\#L102}{\texttt{recvtty}}関数の抜粋
   \end{center}
 \end{frame}
 % runcの寄贈
