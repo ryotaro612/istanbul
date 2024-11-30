@@ -177,17 +177,17 @@
 \section{名前空間}
 \begin{frame}[t]
   \frametitle{名前空間\supercite{namespaces}}
-  名前空間のプロセスにはリソースを占有したように見える
+  名前空間のプロセスには自分達がリソースを占有したように見える
   \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
     \item マウントポイント、プロセスIDなど6種類の名前空間がある
     \item リソース名が重複しても互いに影響しない
     \item API
-      \begin{description}
-      \item[\texttt{clone}] \\新しいプロセスを作る。同時に新しい名前空間を作って子プロセスを入れられる
-      \item[\texttt{setns}] \\呼びだしたスレッドを既存の名前空間に入れる
-      \item[\texttt{unshare}] \\指定した種類の名前空間を作って、呼びだしたプロセスを移動する
+      \begin{description}[leftmargin=4.8em,style=nextline]
+      \item[\texttt{clone}] 新しいプロセスを作る。子プロセスを新しい名前空間に入れることもできる
+      \item[\texttt{setns}] 呼びだしたスレッドを既存の名前空間に入れる
+      \item[\texttt{unshare}] 指定した種類の名前空間を作って、呼びだしたプロセスを移動する
       \end{description}
-  \end{itemize}
+    \end{itemize}
 \end{frame}
 \begin{frame}[t]
   \frametitle{\texttt{nsexec}で名前空間を移動}
