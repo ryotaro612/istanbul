@@ -1,4 +1,5 @@
 f, err := utils.RecvFile(socket)
+// 中略 socketからマスタを取得
 go func() {
   _, _ = io.Copy(epollConsole, os.Stdin)
 }()

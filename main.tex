@@ -120,17 +120,25 @@
     libcontainer.Container\supercite{libcontainer}
   \end{center}
 \end{frame}
-\section{アタッチしたコンテナとホスト間の標準IO}
+\section{アタッチしたコンテナの標準IO}
+\begin{frame}[t]
+  \frametitle{疑似端末 \texttt{pty}}
+  \texttt{pty}はキャラクタデバイスのマスタ、スレーブの組\supercite{pty}
+  \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
+  \item マスタ\texttt{/dev/ptmx}を開くと\texttt{/dev/pts}にスレーブができる
+  \item 一方の入力が他方の出力になる
+  \item \href{https://man7.org/linux/man-pages/man3/ptsname.3.html}{\texttt{ptsname}}関数にマスタのファイル記述子を渡すとスレーブをパスがわかる
+  \end{itemize}
+\end{frame}
 \begin{frame}[t]
   \frametitle{疑似端末の準備}
-  \texttt{runc init}は\texttt{runc run}に疑似端末のマスタを送る
+  \texttt{runc init}は\texttt{runc run}に\texttt{pty}のマスタを送る
   \setlist[enumerate]{label*=\arabic*.,ref=\arabic*}
-  
   \begin{enumerate}[leftmargin=1.2cm]
   \item \texttt{run}は\texttt{socketpair}でファイル記述子のペアをつくる。ペアは双方向通信できる
   \item \texttt{run}はCmd.ExtraFilesで記述子を1つ\texttt{init}にわたす 
-  \item \texttt{init}は\texttt{/dev/ptmx}をひらき、疑似端末のマスタ/スレーブのファイル記述子をつくる。入力は他方への書き込みになる
-  \item \texttt{init}はsendmsgでマスタを\texttt{run}に送る
+  \item \texttt{init}は\texttt{/dev/ptmx}を開く
+  \item \texttt{init}はsendmsgで記述子を介してマスタを\texttt{run}に送る
   \item \texttt{run}はもらったマスタの入出力を標準IOにコピーする
   \end{enumerate}
 \end{frame}
@@ -143,6 +151,22 @@
   \end{center}
 \end{frame}
 \begin{frame}[t]
+  \frametitle{\texttt{init}}
+  \href{https://ja.manpages.org/dup3/2}{dup3}で標準IO, エラー出力のためにスレーブを複製
+  \begin{center}
+    \inputminted{go}{code/pty_init_dup.go}
+    \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/console_linux.go\#L28}{\texttt{dupStdio}}関数の抜粋
+  \end{center}
+\end{frame}
+\begin{frame}[t]
+  \frametitle{\texttt{init}}
+  スレーブをプロセスの制御端末にする\supercite{ioctl}
+  \begin{center}
+    \inputminted{go}{code/pty_tty.go}
+    \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/system/linux.go\#L121}{\texttt{Setctty}}関数の抜粋
+  \end{center}
+\end{frame}
+\begin{frame}[t]
   \frametitle{\texttt{run}}
   標準入力を\texttt{ptmx}に書き、\texttt{ptmx}の出力を標準出力に送る
   \begin{center}
@@ -150,12 +174,24 @@
     \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/tty.go\#L102}{\texttt{recvtty}}関数の抜粋
   \end{center}
 \end{frame}
-% runcの寄贈
-% https://www.docker.com/blog/runc/
-% https://www.docker.com/blog/containerd-vs-docker/
-% https://docs.docker.com/engine/daemon/alternative-runtimes/
+\section{名前空間}
 \begin{frame}[t]
-  \frametitle{名前つきパイプ}
+  \frametitle{名前空間\supercite{namespaces}}
+  名前空間のプロセスにはリソースを占有したように見える
+  \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
+    \item マウントポイント、プロセスIDなど6種類の名前空間がある
+    \item リソース名が重複しても互いに影響しない
+    \item API
+      \begin{description}
+      \item[\texttt{clone}] \\新しいプロセスを作る。同時に新しい名前空間を作って子プロセスを入れられる
+      \item[\texttt{setns}] \\呼びだしたスレッドを既存の名前空間に入れる
+      \item[\texttt{unshare}] \\指定した種類の名前空間を作って、呼びだしたプロセスを移動する
+      \end{description}
+  \end{itemize}
+\end{frame}
+\begin{frame}[t]
+  \frametitle{\texttt{nsexec}で名前空間を移動}
+  Goの前にCの\texttt{nsexec}を実行し、名前空間を変える
   % container_linuxのincludeExec
 \end{frame}
 
