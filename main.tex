@@ -199,12 +199,14 @@
   Goのランタイムには複数のスレッドがある
 \end{frame}
 \begin{frame}[t]
-  \frametitle{\texttt{nsexec}の手続き}
+  \frametitle{\texttt{nsexec}}
+    \texttt{clone}の実引数として\texttt{CLONE\_PARENT}を渡して\texttt{run}を親にする
   \begin{figure}
     \centering
-    \includegraphics[width=6.5cm]{images/nsenter.drawio.pdf}
+    \includegraphics[width=7.0cm]{images/nsenter.drawio.pdf}
+    \caption{\texttt{nsexec}の処理手順}
     \label{fig:nsenter}
-  \end{figure}  
+  \end{figure}
   % \texttt{nsexec}は2度\texttt{clone}を実行する
   % \setlist[enumerate]{label*=\arabic*.,ref=\arabic*}  
   % \begin{enumerate}[leftmargin=1.2cm]

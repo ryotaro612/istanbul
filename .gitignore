@@ -17,5 +17,6 @@ _minted-*
 *-SAVE-ERROR
 # Python
 venv
+*.bkp
 # Emacs
 *~
