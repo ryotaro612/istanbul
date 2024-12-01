@@ -194,9 +194,24 @@
   Goの前にCの\texttt{nsexec}関数を実行する
   \begin{center}
     \inputminted{go}{code/nsenter.go}
-    \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/nsenter/nsenter.go\#L12}{\texttt{nsenter.go}}の抜粋 % TODOリンク修正
+    \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/nsenter/nsenter.go\#L12}{\texttt{nsenter.go}}の抜粋
   \end{center}
   Goのランタイムには複数のスレッドがある
+\end{frame}
+\begin{frame}[t]
+  \frametitle{\texttt{nsexec}の手続き}
+  \begin{figure}
+    \centering
+    \includegraphics[width=6.5cm]{images/nsenter.drawio.pdf}
+    \label{fig:nsenter}
+  \end{figure}  
+  % \texttt{nsexec}は2度\texttt{clone}を実行する
+  % \setlist[enumerate]{label*=\arabic*.,ref=\arabic*}  
+  % \begin{enumerate}[leftmargin=1.2cm]
+  % \item \texttt{init}から名前空間を渡されたら\texttt{setns}で参加
+  % % \item \texttt{clone}で新しい名前空間に子プロセスをつくり、ユーザ、グループIDを更新する
+  % % \item 子プロセスは
+  % \end{enumerate}
 \end{frame}
 \begin{frame}[allowframebreaks]
   \frametitle{参考資料}
