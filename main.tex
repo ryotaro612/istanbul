@@ -22,10 +22,9 @@
 \titlepage
 \end{frame}
 \section{導入}
-\begin{frame}[t]
-  \frametitle{runcってなに}
+\begin{frame}
+  \frametitle{runc}
   後にDockerから独立した低レベルなコンテナランタイムのCLI
-  % 左にレイヤの図。右に箇条書
   \begin{figure}
     \centering
     \includegraphics[width=6.5cm]{images/containerd-diagram-v1.png}
@@ -33,17 +32,17 @@
     \label{fig:runc}
   \end{figure}
 \end{frame}
-\begin{frame}[fragile=singleslide]
+\begin{frame}%[fragile=singleslide]
   \frametitle{イメージはいらない}
   コンテナのルート\texttt{/}があればいい
   \begin{center}
-    \inputminted[fontsize=\footnotesize]{sh}{code/run.sh}
+    \inputminted[fontsize=\small]{sh}{code/run.sh}
     runcでコンテナの\texttt{sh}を開始\supercite{runc}  
   \end{center}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{runcの設計}
-  runcの実装はUNIXプログラミング
+  UNIXの原則により小さなツールをつなぐ
   \begin{center}
     Infrastructure Plumbing Manifesto\footnote{\scriptsize{Dockerのブログ \href{https://www.docker.com/blog/runc/}{Introducing runC: a lightweight universal container runtime
 }より引用}}
@@ -56,18 +55,18 @@
   \end{itemize}
   \end{quote}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{runc runの手続き}
   runが実行したrunc initがコンテナになる
   \begin{figure}
     \centering
-    \includegraphics[width=6.5cm]{images/images.drawio.pdf}
-    \caption{runとinitコマンドの処理}
+    \includegraphics[width=11cm]{images/overview.drawio.pdf}
+    \caption{runとinitコマンドの手続き\footnote{点線は同期}}
     \label{fig:fuga}
   \end{figure}
 \end{frame}
 \section{コンテナの構造体}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{libcontainer.Container}
   フィールドは非公開
   \begin{columns}
@@ -96,7 +95,7 @@
   % fifoは、fifoではなくfd/以下のファイルを親プロセスでは読みにいってスタートしたか調べる。
   % fdの説明
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   プロセスの非機能を隔離、監視\supercite{rdt}する
   \frametitle{libcontainer.Container}
   \begin{center}
@@ -104,7 +103,7 @@
     libcontainer.Container\supercite{libcontainer}
   \end{center}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   コンテナで実行したいプロセスの情報がある
   \frametitle{libcontainer.Container}
   \begin{center}
@@ -120,7 +119,7 @@
     libcontainer.Container\supercite{libcontainer}
   \end{center}
 \end{frame}
-\section{アタッチしたコンテナの標準IO}
+\section{ホストのターミナルとコンテナの標準IOの通信}
 \begin{frame}[t]
   \frametitle{疑似端末 \texttt{pty}}
   \texttt{pty}はキャラクタデバイスのマスタ、スレーブの組\supercite{pty}
@@ -198,9 +197,9 @@
   \end{center}
   Goのランタイムには複数のスレッドがある
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{\texttt{nsexec}}
-    \texttt{clone}の実引数として\texttt{CLONE\_PARENT}を渡して\texttt{run}を親にする
+    \texttt{clone}に\texttt{CLONE\_PARENT}を渡して\texttt{run}を親にする
   \begin{figure}
     \centering
     \includegraphics[width=7.0cm]{images/nsenter.drawio.pdf}
