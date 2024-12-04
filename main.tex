@@ -56,12 +56,11 @@
 \end{frame}
 \begin{frame}
   \frametitle{runc runの手続き}
-  runが実行したrunc initがexecve\supercite{execve}でコンテナのプロセスになる
+  runが実行したrunc initが\href{https://man7.org/linux/man-pages/man2/execve.2.html}{execve}でコンテナのプロセスになる
   \begin{figure}
     \centering
     \includegraphics[width=13cm]{images/overview.drawio.pdf}
     \caption{runとinitコマンドの手続き\footnote{点線はプロセスを横断する処理}}
-    \label{fig:overview}
   \end{figure}
 \end{frame}
 \section{ホストとコンテナの端末間通信}
@@ -71,7 +70,6 @@
     \centering
     \includegraphics[width=14cm]{images/overview.drawio.pdf}
     \caption{runとinitコマンドの手続き\footnote{点線はプロセスを横断する処理}}
-    \label{fig:re-overview}
   \end{figure}
 \end{frame}
 \begin{frame}
@@ -85,15 +83,16 @@
   \end{itemize}
 \end{frame}
 \begin{frame}
-  \frametitle{疑似端末の準備}
-  \texttt{runc init}は\texttt{runc run}に\texttt{pty}のマスタを送る
+  \frametitle{\texttt{pty}の準備}
+
+  \texttt{runc init}は\texttt{runc run}にマスタのファイル記述子を送る
   \setlist[enumerate]{label*=\arabic*.,ref=\arabic*}
   \begin{enumerate}[leftmargin=1.2cm]
-  \item \texttt{run}は\texttt{socketpair}でファイル記述子のペアをつくる。ペアは双方向通信できる
-  \item \texttt{run}はCmd.ExtraFilesで記述子を1つ\texttt{init}にわたす 
+  \item \texttt{run}は\href{https://man7.org/linux/man-pages/man2/socketpair.2.html}{\texttt{socketpair}}でファイル記述子のペアをつくる。ペアは双方向通信できる
+  \item \texttt{run}は\href{https://pkg.go.dev/os/exec\#Cmd}{\texttt{Cmd.ExtraFiles}}で記述子を1つ\texttt{init}にわたす 
   \item \texttt{init}は\texttt{/dev/ptmx}を開く
   \item \texttt{init}はsendmsgで記述子を介してマスタを\texttt{run}に送る
-  \item \texttt{run}はもらったマスタの入出力を標準IOにコピーする
+  \item \texttt{run}はマスタの入出力を標準IOにコピーする
   \end{enumerate}
 \end{frame}
 \begin{frame}
@@ -122,14 +121,14 @@
 \end{frame}
 \begin{frame}
   \frametitle{\texttt{run}}
-  標準入力を\texttt{ptmx}に書き、\texttt{ptmx}の出力を標準出力に送る
+  ホストの標準入力をマスタに書き、マスタの出力をホストの標準出力に送る
   \begin{center}
     \inputminted{go}{code/tty_run.go}
-    \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/tty.go\#L102}{\texttt{recvtty}}関数の抜粋\footnote{\scriptsize{\texttt{epoll}\supercite{epoll}は複数のファイル記述子の入出力の状態を監視する}}
+    \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/tty.go\#L102}{\texttt{recvtty}}関数の抜粋
   \end{center}
+  \href{https://man7.org/linux/man-pages/man7/epoll.7.html}{\texttt{epoll}}でマスタの入出力を監視
 \end{frame}
 \section{名前空間}
-\againframe{overview}
 \begin{frame}
   \frametitle{名前空間\supercite{namespaces}}
   空間のプロセスには自分達がリソースを占有したように見える
@@ -139,7 +138,7 @@
     \item API
       \begin{description}[leftmargin=4.8em,style=nextline]
       \item[\texttt{clone}] 新しいプロセスを作る。子プロセスを新しい名前空間に入れることもできる
-      \item[\texttt{setns}] 呼びだしたスレッドを既存の名前空間に入れる
+      \item[\texttt{setns}] 呼びだしたスレッドを既存の名前空間に入れる。用途はコンテナ間でのネットワークの共有など
       \item[\texttt{unshare}] 指定した種類の名前空間を作り、呼びだしたプロセスを移動する
       \end{description}
     \end{itemize}
@@ -155,17 +154,25 @@
 \end{frame}
 \begin{frame}
   \frametitle{\texttt{nsexec}}
-  \footnote{\texttt{clone}に\texttt{CLONE\_PARENT}を渡して子プロセスの親プロセスを呼出元プロセスの親プロセス\texttt{run}にする。}
   \texttt{clone}をして名前空間を移動する
-  \begin{figure}
-    \centering
-    \includegraphics[width=6.0cm]{images/nsenter.drawio.pdf}
-    \caption{\texttt{nsexec}の処理手順}
-    \label{fig:nsenter}
-  \end{figure}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
+      \item \href{https://man7.org/linux/man-pages/man2/clone.2.html}{\texttt{clone}}に\texttt{CLONE\_PARENT}を渡すので、新しい\texttt{init}の親プロセスは、呼出元\texttt{init}の親プロセス\texttt{run}になる。結果、\texttt{SIGCHLD}が\texttt{run}に送られる
+      \item \texttt{uid\_map}, \texttt{gid\_map}には、
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{figure}
+        \centering
+        \includegraphics[width=7cm]{images/nsenter.drawio.pdf}
+        \caption{\texttt{nsexec}の処理手順}
+        \label{fig:nsenter}
+      \end{figure}      
+    \end{column}
+  \end{columns}
 \end{frame}
 \section{ファイルシステムの変更}
-\againframe{overview}
 \begin{frame}[t]
   \frametitle{\texttt{init}のルートファイルシステムを変更}
   \texttt{pivot\_root}でファイルシステムを変更する
@@ -175,7 +182,6 @@
   \end{center}
 \end{frame}
 \section{付録 コンテナの構造体}
-\againframe{overview}
 \begin{frame}
   \frametitle{libcontainer.Container}
   フィールドは非公開
@@ -193,17 +199,7 @@
         \item \texttt{/proc/self/exe}は実行中のプログラムのパスのシンボリックリンク
       \end{itemize}
     \end{column}
-\end{columns}
-  % 設定、プロセス、リソース制御のフィールドがある
-  % \begin{center}
-  %   \inputminted[fontsize=\footnotesize]{go}{code/container.txt}
-  %   \texttt{Container}のフィールド
-  % \end{center}
-  % initプロセスか
-  % stateDirにfifoをおく
-  % _LIBCONTAINER_FIFOFD=でつたえる
-  % fifoは、fifoではなくfd/以下のファイルを親プロセスでは読みにいってスタートしたか調べる。
-  % fdの説明
+  \end{columns}
 \end{frame}
 \begin{frame}
   プロセスの非機能を隔離、監視\supercite{rdt}する
