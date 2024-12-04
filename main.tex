@@ -64,14 +64,6 @@
   \end{figure}
 \end{frame}
 \section{ホストとコンテナの端末間通信}
-\begin{frame}[label=overview]
-  \frametitle{再掲 runc runの手続き}
-  \begin{figure}
-    \centering
-    \includegraphics[width=14cm]{images/overview.drawio.pdf}
-    \caption{runとinitコマンドの手続き\footnote{点線はプロセスを横断する処理}}
-  \end{figure}
-\end{frame}
 \begin{frame}
   \frametitle{疑似端末 \texttt{pty}}
   \texttt{pty}はキャラクタデバイスのマスタ、スレーブの組\supercite{pty}
@@ -173,7 +165,7 @@
   \end{columns}
 \end{frame}
 \section{ファイルシステムの変更}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{\texttt{init}のルートファイルシステムを変更}
   \texttt{pivot\_root}でファイルシステムを変更する
   \begin{center}
