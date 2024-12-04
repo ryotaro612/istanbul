@@ -32,12 +32,11 @@
 \end{frame}
 \begin{frame}%[fragile=singleslide]
   \frametitle{抽象度の低い\texttt{runc}}
-  コンテナのルート\texttt{/}があればいい
+  イメージはいらず、コンテナのルート\texttt{/}があればいい
   \begin{center}
     \inputminted[fontsize=\small]{sh}{code/run.sh}
     runcでコンテナの\texttt{sh}を開始\supercite{runc}  
   \end{center}
-  イメージはいらない
 \end{frame}
 \begin{frame}
   \frametitle{資料の目的}
@@ -75,7 +74,7 @@
     \label{fig:re-overview}
   \end{figure}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{疑似端末 \texttt{pty}}
   \texttt{pty}はキャラクタデバイスのマスタ、スレーブの組\supercite{pty}
   \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
@@ -85,7 +84,7 @@
   \item 通常、forkされたプロセスはスレーブを複製して標準I/O, エラー\footnote{\scriptsize{\texttt{ls -l /proc/<pid>/fd}で記述子0, 1, 2の参照先を確認できる}}にする\supercite{advancedunix}
   \end{itemize}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{疑似端末の準備}
   \texttt{runc init}は\texttt{runc run}に\texttt{pty}のマスタを送る
   \setlist[enumerate]{label*=\arabic*.,ref=\arabic*}
@@ -97,7 +96,7 @@
   \item \texttt{run}はもらったマスタの入出力を標準IOにコピーする
   \end{enumerate}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{\texttt{init}}
   マスタを\texttt{run}に送る
   \begin{center}
@@ -105,7 +104,7 @@
     \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/init_linux.go\#L371}{\texttt{setupConsole}}関数の抜粋
   \end{center}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{\texttt{init}}
   \href{https://ja.manpages.org/dup3/2}{dup3}で標準IO, エラー出力のためにスレーブを複製
   \begin{center}
@@ -113,7 +112,7 @@
     \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/console_linux.go\#L28}{\texttt{dupStdio}}関数の抜粋
   \end{center}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{\texttt{init}}
   スレーブをプロセスの制御端末にする\supercite{ioctl}
   \begin{center}
@@ -121,7 +120,7 @@
     \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/system/linux.go\#L121}{\texttt{Setctty}}関数の抜粋
   \end{center}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{\texttt{run}}
   標準入力を\texttt{ptmx}に書き、\texttt{ptmx}の出力を標準出力に送る
   \begin{center}
@@ -131,7 +130,7 @@
 \end{frame}
 \section{名前空間}
 \againframe{overview}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{名前空間\supercite{namespaces}}
   空間のプロセスには自分達がリソースを占有したように見える
   \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
@@ -145,7 +144,7 @@
       \end{description}
     \end{itemize}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{\texttt{nsexec}で\texttt{init}の名前空間を移動}
   Goの前にCの\texttt{nsexec}関数を実行する
   \begin{center}
@@ -156,7 +155,8 @@
 \end{frame}
 \begin{frame}
   \frametitle{\texttt{nsexec}}
-    \texttt{clone}に\texttt{CLONE\_PARENT}\footnote{\scriptsize{子プロセス}は呼出元プロセスの親プロセスになる。\texttt{run}が\texttt{SIGCHLD}を待つ}を渡して\texttt{run}を親にする
+  % \texttt{clone}に\texttt{CLONE\_PARENT}\footnote{\scriptsize{子プロセス}は呼出元プロセスの親プロセスになる。\texttt{run}が\texttt{SIGCHLD}を待つ}を渡して\texttt{run}を親にする
+  \texttt{clone}をして名前空間を移動する
   \begin{figure}
     \centering
     \includegraphics[width=7.0cm]{images/nsenter.drawio.pdf}
