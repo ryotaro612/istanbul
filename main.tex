@@ -39,11 +39,11 @@
   \end{center}
 \end{frame}
 \begin{frame}
-  \frametitle{runcの設計}
-  UNIXの原則により小さな機能を組み合わせる
+  \frametitle{資料の目的}
+  UNIXプログラミングの基本的な道具を知ること
   \begin{center}
-    Infrastructure Plumbing Manifesto\footnote{\scriptsize{Dockerのブログ \href{https://www.docker.com/blog/runc/}{Introducing runC: a lightweight universal container runtime
-}より引用}}
+    Infrastructure Plumbing Manifesto\footnote{\scriptsize{dockerのブログ \href{https://www.docker.com/blog/runc/}{Introducing runC: a lightweight universal container runtime
+}より}}
     \end{center}
   \begin{quote}
     \begin{itemize}
@@ -51,73 +51,20 @@
     \item {\small Follow the unix principles: several simple components are better than a single, complicated one.}
     \item {\small Define standard interfaces which can be used to combine many simple components into a more sophisticated system.}
   \end{itemize}
-  \end{quote}
+\end{quote}
+  runcはUNIXの原則による小さな機能を組み合わせ
 \end{frame}
 \begin{frame}
   \frametitle{runc runの手続き}
-  runが実行したrunc initがexecveでコンテナのプロセスになる
+  runが実行したrunc initがexecve\supercite{execve}でコンテナのプロセスになる
   \begin{figure}
     \centering
     \includegraphics[width=13cm]{images/overview.drawio.pdf}
-    \caption{runとinitコマンドの手続き\footnote{点線はプロセス間の連携}}
+    \caption{runとinitコマンドの手続き\footnote{点線はプロセスを横断する処理}}
     \label{fig:fuga}
   \end{figure}
 \end{frame}
-\section{コンテナの構造体}
-\begin{frame}
-  \frametitle{libcontainer.Container}
-  フィールドは非公開
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
-      \begin{center}
-        \inputminted{go}{code/container.go}
-        libcontainer.Container\supercite{libcontainer}
-      \end{center}
-    \end{column}
-    \begin{column}{0.5\textwidth}  %%<--- here
-      \begin{itemize}[leftmargin=0.2cm,label=$\circ$]
-        \item \texttt{stateDir}は\texttt{runc}の\texttt{--root}オプション\texttt{<dir>}とすると\texttt{<dir>/<id>}
-        \item \texttt{stateDir}には\texttt{run init}を呼びだす \texttt{/proc/self/exe}の複製や名前つきパイプをおく
-        \item \texttt{/proc/self/exe}は実行中のプログラムのパスのシンボリックリンク
-      \end{itemize}
-    \end{column}
-\end{columns}
-  % 設定、プロセス、リソース制御のフィールドがある
-  % \begin{center}
-  %   \inputminted[fontsize=\footnotesize]{go}{code/container.txt}
-  %   \texttt{Container}のフィールド
-  % \end{center}
-  % initプロセスか
-  % stateDirにfifoをおく
-  % _LIBCONTAINER_FIFOFD=でつたえる
-  % fifoは、fifoではなくfd/以下のファイルを親プロセスでは読みにいってスタートしたか調べる。
-  % fdの説明
-\end{frame}
-\begin{frame}
-  プロセスの非機能を隔離、監視\supercite{rdt}する
-  \frametitle{libcontainer.Container}
-  \begin{center}
-    \inputminted{go}{code/container2.go}
-    libcontainer.Container\supercite{libcontainer}
-  \end{center}
-\end{frame}
-\begin{frame}
-  コンテナで実行したいプロセスの情報がある
-  \frametitle{libcontainer.Container}
-  \begin{center}
-    \inputminted{go}{code/container3.go}
-    libcontainer.Container\supercite{libcontainer}
-  \end{center}
-\end{frame}
-\begin{frame}[t]
-  \frametitle{libcontainer.Container}
-  コンテナのチェックポイント、リストアのフィールドがある\supercite{criu}
-  \begin{center}
-    \inputminted{go}{code/container4.go}
-    libcontainer.Container\supercite{libcontainer}
-  \end{center}
-\end{frame}
-\section{ホストのターミナルとコンテナの標準IOの通信}
+\section{ホストとコンテナの端末間通信}
 \begin{frame}[t]
   \frametitle{疑似端末 \texttt{pty}}
   \texttt{pty}はキャラクタデバイスのマスタ、スレーブの組\supercite{pty}
@@ -219,6 +166,60 @@
   \begin{center}
     \inputminted{sh}{code/pivot_root.sh}
     \texttt{pivot\_root}の実行例
+  \end{center}
+\end{frame}
+\section{付録 コンテナの構造体}
+\begin{frame}
+  \frametitle{libcontainer.Container}
+  フィールドは非公開
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{center}
+        \inputminted{go}{code/container.go}
+        libcontainer.Container\supercite{libcontainer}
+      \end{center}
+    \end{column}
+    \begin{column}{0.5\textwidth}  %%<--- here
+      \begin{itemize}[leftmargin=0.2cm,label=$\circ$]
+        \item \texttt{stateDir}は\texttt{runc}の\texttt{--root}オプション\texttt{<dir>}とすると\texttt{<dir>/<id>}
+        \item \texttt{stateDir}には\texttt{run init}を呼びだす \texttt{/proc/self/exe}の複製や名前つきパイプをおく
+        \item \texttt{/proc/self/exe}は実行中のプログラムのパスのシンボリックリンク
+      \end{itemize}
+    \end{column}
+\end{columns}
+  % 設定、プロセス、リソース制御のフィールドがある
+  % \begin{center}
+  %   \inputminted[fontsize=\footnotesize]{go}{code/container.txt}
+  %   \texttt{Container}のフィールド
+  % \end{center}
+  % initプロセスか
+  % stateDirにfifoをおく
+  % _LIBCONTAINER_FIFOFD=でつたえる
+  % fifoは、fifoではなくfd/以下のファイルを親プロセスでは読みにいってスタートしたか調べる。
+  % fdの説明
+\end{frame}
+\begin{frame}
+  プロセスの非機能を隔離、監視\supercite{rdt}する
+  \frametitle{libcontainer.Container}
+  \begin{center}
+    \inputminted{go}{code/container2.go}
+    libcontainer.Container\supercite{libcontainer}
+  \end{center}
+\end{frame}
+\begin{frame}
+  コンテナで実行したいプロセスの情報がある
+  \frametitle{libcontainer.Container}
+  \begin{center}
+    \inputminted{go}{code/container3.go}
+    libcontainer.Container\supercite{libcontainer}
+  \end{center}
+\end{frame}
+\begin{frame}[t]
+  \frametitle{libcontainer.Container}
+  コンテナのチェックポイント、リストアのフィールドがある\supercite{criu}
+  \begin{center}
+    \inputminted{go}{code/container4.go}
+    libcontainer.Container\supercite{libcontainer}
   \end{center}
 \end{frame}
 \begin{frame}[allowframebreaks]
