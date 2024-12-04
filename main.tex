@@ -32,12 +32,11 @@
 \end{frame}
 \begin{frame}%[fragile=singleslide]
   \frametitle{抽象度の低い\texttt{runc}}
-  コンテナのルート\texttt{/}があればいい
+  イメージはいらず、コンテナのルート\texttt{/}があればいい
   \begin{center}
     \inputminted[fontsize=\small]{sh}{code/run.sh}
     runcでコンテナの\texttt{sh}を開始\supercite{runc}  
   \end{center}
-  イメージはいらない
 \end{frame}
 \begin{frame}
   \frametitle{資料の目的}
@@ -57,47 +56,38 @@
 \end{frame}
 \begin{frame}
   \frametitle{runc runの手続き}
-  runが実行したrunc initがexecve\supercite{execve}でコンテナのプロセスになる
-  \begin{figure}
-    \centering
-    \includegraphics[width=13cm]{images/overview.drawio.pdf}
-    \caption{runとinitコマンドの手続き\footnote{点線はプロセスを横断する処理}}
-    \label{fig:overview}
-  \end{figure}
-\end{frame}
-\section{ホストとコンテナの端末間通信}
-\begin{frame}[label=overview]
-  \frametitle{再掲 runc runの手続き}
+  runが実行したrunc initが\href{https://man7.org/linux/man-pages/man2/execve.2.html}{execve}でコンテナのプロセスになる
   \begin{figure}
     \centering
     \includegraphics[width=14cm]{images/overview.drawio.pdf}
     \caption{runとinitコマンドの手続き\footnote{点線はプロセスを横断する処理}}
-    \label{fig:re-overview}
   \end{figure}
 \end{frame}
-\begin{frame}[t]
+\section{ホストとコンテナの端末間通信}
+\begin{frame}
   \frametitle{疑似端末 \texttt{pty}}
   \texttt{pty}はキャラクタデバイスのマスタ、スレーブの組\supercite{pty}
   \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
-  \item マスタ\texttt{/dev/ptmx}を開くと\texttt{/dev/pts}にスレーブができる
+  \item マスタ\texttt{/dev/ptmx}を開くと\texttt{/dev/pts}下にスレーブができる
   \item 一方の入力が他方の出力になる
   \item \href{https://man7.org/linux/man-pages/man3/ptsname.3.html}{\texttt{ptsname}}関数にマスタのファイル記述子を渡すとスレーブをパスがわかる
-  \item 通常、forkされたプロセスはスレーブを複製して標準I/O, エラー\footnote{\scriptsize{\texttt{ls -l /proc/<pid>/fd}で記述子0, 1, 2の参照先を確認できる}}にする\supercite{advancedunix}
+  \item 通常、forkされたプロセスはスレーブを複製して標準I/O, エラーにする\supercite{advancedunix}
+  \item \texttt{ls -l /proc/<pid>/fd}で記述子0, 1, 2がスレーブへのリンクか分かる
   \end{itemize}
 \end{frame}
-\begin{frame}[t]
-  \frametitle{疑似端末の準備}
-  \texttt{runc init}は\texttt{runc run}に\texttt{pty}のマスタを送る
+\begin{frame}
+  \frametitle{\texttt{pty}の準備}
+  \texttt{runc init}は\texttt{runc run}にマスタのファイル記述子を送る
   \setlist[enumerate]{label*=\arabic*.,ref=\arabic*}
   \begin{enumerate}[leftmargin=1.2cm]
-  \item \texttt{run}は\texttt{socketpair}でファイル記述子のペアをつくる。ペアは双方向通信できる
-  \item \texttt{run}はCmd.ExtraFilesで記述子を1つ\texttt{init}にわたす 
+  \item \texttt{run}は\href{https://man7.org/linux/man-pages/man2/socketpair.2.html}{\texttt{socketpair}}でソケットのペアをつくる。ペアは双方向通信できる
+  \item \texttt{run}は\href{https://pkg.go.dev/os/exec\#Cmd}{\texttt{Cmd.ExtraFiles}}でソケットを1つ\texttt{init}にわたす 
   \item \texttt{init}は\texttt{/dev/ptmx}を開く
-  \item \texttt{init}はsendmsgで記述子を介してマスタを\texttt{run}に送る
-  \item \texttt{run}はもらったマスタの入出力を標準IOにコピーする
+  \item \texttt{init}は\href{https://man7.org/linux/man-pages/man3/sendmsg.3p.html}{sendmsg}でソケットを通してマスタを\texttt{run}に送る
+  \item \texttt{run}はマスタの入出力を標準IOにコピーする
   \end{enumerate}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{\texttt{init}}
   マスタを\texttt{run}に送る
   \begin{center}
@@ -105,7 +95,7 @@
     \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/init_linux.go\#L371}{\texttt{setupConsole}}関数の抜粋
   \end{center}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{\texttt{init}}
   \href{https://ja.manpages.org/dup3/2}{dup3}で標準IO, エラー出力のためにスレーブを複製
   \begin{center}
@@ -113,7 +103,7 @@
     \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/console_linux.go\#L28}{\texttt{dupStdio}}関数の抜粋
   \end{center}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{\texttt{init}}
   スレーブをプロセスの制御端末にする\supercite{ioctl}
   \begin{center}
@@ -121,17 +111,17 @@
     \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/system/linux.go\#L121}{\texttt{Setctty}}関数の抜粋
   \end{center}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{\texttt{run}}
-  標準入力を\texttt{ptmx}に書き、\texttt{ptmx}の出力を標準出力に送る
+  ホストの標準入力をマスタに書き、マスタの出力をホストの標準出力に送る
   \begin{center}
     \inputminted{go}{code/tty_run.go}
-    \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/tty.go\#L102}{\texttt{recvtty}}関数の抜粋\footnote{\scriptsize{\texttt{epoll}\supercite{epoll}は複数のファイル記述子の入出力の状態を監視する}}
+    \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/tty.go\#L102}{\texttt{recvtty}}関数の抜粋
   \end{center}
+  \href{https://man7.org/linux/man-pages/man7/epoll.7.html}{\texttt{epoll}}でマスタの入出力を監視
 \end{frame}
 \section{名前空間}
-\againframe{overview}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{名前空間\supercite{namespaces}}
   空間のプロセスには自分達がリソースを占有したように見える
   \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
@@ -139,33 +129,43 @@
     \item 名前空間の間でリソース名が重複しても互いに影響しない
     \item API
       \begin{description}[leftmargin=4.8em,style=nextline]
-      \item[\texttt{clone}] 新しいプロセスを作る。子プロセスを新しい名前空間に入れることもできる
-      \item[\texttt{setns}] 呼びだしたスレッドを既存の名前空間に入れる
-      \item[\texttt{unshare}] 指定した種類の名前空間を作り、呼びだしたプロセスを移動する
+      \item[\href{https://man7.org/linux/man-pages/man2/clone.2.html}{\texttt{clone}}] 新しいプロセスを作る。子プロセスを新しい名前空間に入れることもできる
+      \item[\href{https://man7.org/linux/man-pages/man2/setns.2.html}{\texttt{setns}}] 呼びだしたスレッドを既存の名前空間に入れる。用途はコンテナ間でのネットワークの共有など
+      \item[\href{https://man7.org/linux/man-pages/man2/unshare.2.html}{\texttt{unshare}}] 指定した種類の名前空間を作り、呼びだしたプロセスを移動する
       \end{description}
     \end{itemize}
 \end{frame}
-\begin{frame}[t]
+\begin{frame}
   \frametitle{\texttt{nsexec}で\texttt{init}の名前空間を移動}
   Goの前にCの\texttt{nsexec}関数を実行する
   \begin{center}
     \inputminted{go}{code/nsenter.go}
     \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/nsenter/nsenter.go\#L12}{\texttt{nsenter.go}}の抜粋
   \end{center}
-  \texttt{setns}はスレッドの名前空間を移すが、Goのランタイムには複数のスレッドがある
+  Goのランタイムには複数のスレッドがある\supercite{runc}。\texttt{setns}をGoで実行すると、実行したスレッド以外が今の名前空間にとり残される
 \end{frame}
-\begin{frame}
-  \frametitle{\texttt{nsexec}}
-    \texttt{clone}に\texttt{CLONE\_PARENT}\footnote{\scriptsize{子プロセス}は呼出元プロセスの親プロセスになる。\texttt{run}が\texttt{SIGCHLD}を待つ}を渡して\texttt{run}を親にする
-  \begin{figure}
-    \centering
-    \includegraphics[width=7.0cm]{images/nsenter.drawio.pdf}
-    \caption{\texttt{nsexec}の処理手順}
-    \label{fig:nsenter}
-  \end{figure}
-\end{frame}
-\section{ファイルシステムの変更}
 \begin{frame}[t]
+  \frametitle{\texttt{nsexec}}
+  \texttt{unshare}では呼出元のプロセス名前空間を変更できないので、pid 1を割り当てるため\texttt{clone}する
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
+      \item \href{https://man7.org/linux/man-pages/man2/clone.2.html}{\texttt{clone}}に\texttt{CLONE\_PARENT}を渡し、新しい\texttt{init}の親プロセスを常に\texttt{run}にし、\texttt{SIGCHLD}を\texttt{run}に届ける
+      \item \texttt{uid\_map}, \texttt{gid\_map}には、親と子の名前空間のユーザ、グループIDの写像を書く
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{figure}
+        \centering
+        \includegraphics[width=6cm]{images/nsenter.drawio.pdf}
+        \caption{\texttt{nsexec}の処理手順}
+        \label{fig:nsenter}
+      \end{figure}      
+    \end{column}
+  \end{columns}
+\end{frame} 
+\section{ファイルシステムの変更}
+\begin{frame}
   \frametitle{\texttt{init}のルートファイルシステムを変更}
   \texttt{pivot\_root}でファイルシステムを変更する
   \begin{center}
@@ -174,7 +174,6 @@
   \end{center}
 \end{frame}
 \section{付録 コンテナの構造体}
-\againframe{overview}
 \begin{frame}
   \frametitle{libcontainer.Container}
   フィールドは非公開
@@ -185,14 +184,14 @@
         libcontainer.Container\supercite{libcontainer}
       \end{center}
     \end{column}
-    \begin{column}{0.5\textwidth}  %%<--- here
+    \begin{column}{0.5\textwidth}
       \begin{itemize}[leftmargin=0.2cm,label=$\circ$]
         \item \texttt{stateDir}は\texttt{runc}の\texttt{--root}オプション\texttt{<dir>}とすると\texttt{<dir>/<id>}
         \item \texttt{stateDir}には\texttt{run init}を呼びだす \texttt{/proc/self/exe}の複製や名前つきパイプをおく
         \item \texttt{/proc/self/exe}は実行中のプログラムのパスのシンボリックリンク
       \end{itemize}
     \end{column}
-\end{columns}
+  \end{columns}
 \end{frame}
 \begin{frame}
   プロセスの非機能を隔離、監視\supercite{rdt}する
@@ -222,6 +221,6 @@
   \frametitle{参考資料}
   \printbibliography
   % 引用していないbibファイルの要素も記載する  
-  \nocite{*} 
+  \nocite{*}
 \end{frame}
 \end{document}
