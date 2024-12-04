@@ -31,12 +31,13 @@
   \end{figure}
 \end{frame}
 \begin{frame}%[fragile=singleslide]
-  \frametitle{イメージはいらない}
+  \frametitle{抽象度の低い\texttt{runc}}
   コンテナのルート\texttt{/}があればいい
   \begin{center}
     \inputminted[fontsize=\small]{sh}{code/run.sh}
     runcでコンテナの\texttt{sh}を開始\supercite{runc}  
   \end{center}
+  イメージはいらない
 \end{frame}
 \begin{frame}
   \frametitle{資料の目的}
@@ -61,10 +62,19 @@
     \centering
     \includegraphics[width=13cm]{images/overview.drawio.pdf}
     \caption{runとinitコマンドの手続き\footnote{点線はプロセスを横断する処理}}
-    \label{fig:fuga}
+    \label{fig:overview}
   \end{figure}
 \end{frame}
 \section{ホストとコンテナの端末間通信}
+\begin{frame}[label=overview]
+  \frametitle{再掲 runc runの手続き}
+  \begin{figure}
+    \centering
+    \includegraphics[width=14cm]{images/overview.drawio.pdf}
+    \caption{runとinitコマンドの手続き\footnote{点線はプロセスを横断する処理}}
+    \label{fig:re-overview}
+  \end{figure}
+\end{frame}
 \begin{frame}[t]
   \frametitle{疑似端末 \texttt{pty}}
   \texttt{pty}はキャラクタデバイスのマスタ、スレーブの組\supercite{pty}
@@ -72,6 +82,7 @@
   \item マスタ\texttt{/dev/ptmx}を開くと\texttt{/dev/pts}にスレーブができる
   \item 一方の入力が他方の出力になる
   \item \href{https://man7.org/linux/man-pages/man3/ptsname.3.html}{\texttt{ptsname}}関数にマスタのファイル記述子を渡すとスレーブをパスがわかる
+  \item 通常、forkされたプロセスはスレーブを複製して標準I/O, エラー\footnote{\scriptsize{\texttt{ls -l /proc/<pid>/fd}で記述子0, 1, 2の参照先を確認できる}}にする\supercite{advancedunix}
   \end{itemize}
 \end{frame}
 \begin{frame}[t]
@@ -115,21 +126,22 @@
   標準入力を\texttt{ptmx}に書き、\texttt{ptmx}の出力を標準出力に送る
   \begin{center}
     \inputminted{go}{code/tty_run.go}
-    \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/tty.go\#L102}{\texttt{recvtty}}関数の抜粋
+    \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/tty.go\#L102}{\texttt{recvtty}}関数の抜粋\footnote{\scriptsize{\texttt{epoll}\supercite{epoll}は複数のファイル記述子の入出力の状態を監視する}}
   \end{center}
 \end{frame}
 \section{名前空間}
+\againframe{overview}
 \begin{frame}[t]
   \frametitle{名前空間\supercite{namespaces}}
   空間のプロセスには自分達がリソースを占有したように見える
   \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
     \item マウントポイント、プロセスIDなど6種類の名前空間がある
-    \item リソース名が重複しても互いに影響しない
+    \item 名前空間の間でリソース名が重複しても互いに影響しない
     \item API
       \begin{description}[leftmargin=4.8em,style=nextline]
       \item[\texttt{clone}] 新しいプロセスを作る。子プロセスを新しい名前空間に入れることもできる
       \item[\texttt{setns}] 呼びだしたスレッドを既存の名前空間に入れる
-      \item[\texttt{unshare}] 指定した種類の名前空間を作って、呼びだしたプロセスを移動する
+      \item[\texttt{unshare}] 指定した種類の名前空間を作り、呼びだしたプロセスを移動する
       \end{description}
     \end{itemize}
 \end{frame}
@@ -140,26 +152,20 @@
     \inputminted{go}{code/nsenter.go}
     \href{https://github.com/opencontainers/runc/blob/7cb363254b69e10320360b63fb73e0ffb5da7bf2/libcontainer/nsenter/nsenter.go\#L12}{\texttt{nsenter.go}}の抜粋
   \end{center}
-  Goのランタイムには複数のスレッドがある
+  \texttt{setns}はスレッドの名前空間を移すが、Goのランタイムには複数のスレッドがある
 \end{frame}
 \begin{frame}
   \frametitle{\texttt{nsexec}}
-    \texttt{clone}に\texttt{CLONE\_PARENT}を渡して\texttt{run}を親にする
+    \texttt{clone}に\texttt{CLONE\_PARENT}\footnote{\scriptsize{子プロセス}は呼出元プロセスの親プロセスになる。\texttt{run}が\texttt{SIGCHLD}を待つ}を渡して\texttt{run}を親にする
   \begin{figure}
     \centering
     \includegraphics[width=7.0cm]{images/nsenter.drawio.pdf}
     \caption{\texttt{nsexec}の処理手順}
     \label{fig:nsenter}
   \end{figure}
-  % \texttt{nsexec}は2度\texttt{clone}を実行する
-  % \setlist[enumerate]{label*=\arabic*.,ref=\arabic*}  
-  % \begin{enumerate}[leftmargin=1.2cm]
-  % \item \texttt{init}から名前空間を渡されたら\texttt{setns}で参加
-  % % \item \texttt{clone}で新しい名前空間に子プロセスをつくり、ユーザ、グループIDを更新する
-  % % \item 子プロセスは
-  % \end{enumerate}
 \end{frame}
 \section{ファイルシステムの変更}
+\againframe{overview}
 \begin{frame}[t]
   \frametitle{\texttt{init}のルートファイルシステムを変更}
   \texttt{pivot\_root}でファイルシステムを変更する
@@ -169,6 +175,7 @@
   \end{center}
 \end{frame}
 \section{付録 コンテナの構造体}
+\againframe{overview}
 \begin{frame}
   \frametitle{libcontainer.Container}
   フィールドは非公開
