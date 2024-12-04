@@ -155,11 +155,11 @@
 \end{frame}
 \begin{frame}
   \frametitle{\texttt{nsexec}}
-  % \texttt{clone}に\texttt{CLONE\_PARENT}\footnote{\scriptsize{子プロセス}は呼出元プロセスの親プロセスになる。\texttt{run}が\texttt{SIGCHLD}を待つ}を渡して\texttt{run}を親にする
+  \footnote{\texttt{clone}に\texttt{CLONE\_PARENT}を渡して子プロセスの親プロセスを呼出元プロセスの親プロセス\texttt{run}にする。}
   \texttt{clone}をして名前空間を移動する
   \begin{figure}
     \centering
-    \includegraphics[width=7.0cm]{images/nsenter.drawio.pdf}
+    \includegraphics[width=6.0cm]{images/nsenter.drawio.pdf}
     \caption{\texttt{nsexec}の処理手順}
     \label{fig:nsenter}
   \end{figure}
@@ -235,5 +235,4 @@
   % 引用していないbibファイルの要素も記載する  
   \nocite{*} 
 \end{frame}
-
 \end{document}
