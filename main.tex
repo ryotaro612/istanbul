@@ -167,56 +167,75 @@
 \section{ファイルシステムの変更}
 \begin{frame}
   \frametitle{\texttt{init}のルートファイルシステムを変更}
-  \texttt{pivot\_root}でファイルシステムを変更する
+  \href{https://man7.org/linux/man-pages/man2/pivot_root.2.html}{\texttt{pivot\_root}}でファイルシステムを変更する
   \begin{center}
     \inputminted{sh}{code/pivot_root.sh}
     \texttt{pivot\_root}の実行例
   \end{center}
 \end{frame}
-\section{付録 コンテナの構造体}
+\section{おわりに}
 \begin{frame}
-  \frametitle{libcontainer.Container}
-  フィールドは非公開
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
-      \begin{center}
-        \inputminted{go}{code/container.go}
-        libcontainer.Container\supercite{libcontainer}
-      \end{center}
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \begin{itemize}[leftmargin=0.2cm,label=$\circ$]
-        \item \texttt{stateDir}は\texttt{runc}の\texttt{--root}オプション\texttt{<dir>}とすると\texttt{<dir>/<id>}
-        \item \texttt{stateDir}には\texttt{run init}を呼びだす \texttt{/proc/self/exe}の複製や名前つきパイプをおく
-        \item \texttt{/proc/self/exe}は実行中のプログラムのパスのシンボリックリンク
-      \end{itemize}
-    \end{column}
-  \end{columns}
+  \frametitle{実装とPlumbling Manifestoをくらべて}
+  コンテナのプロセスとホストのプロセスに想像よりも差異がないと思えたか
+  \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
+  \item 標準のインターフェース
+    \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
+    \item 端末, 名前空間、マウントは違うものだが、すべて\texttt{/proc}下にファイル(\texttt{ns}, \texttt{fd}, \texttt{mounts})として状態が示されている
+    \item ファイル開き、返った記述子を関数に渡して操作できる
+    \end{itemize}
+  \item 小さなツールのあつまり
+    \begin{itemize}
+      \item コンテナに用途を限らない機能の組合せで実装されている
+      \footnote{\texttt{clone}の\texttt{CLONE\_NEWIPC}などコンテナのために用意された機能も一部ある}
+    \end{itemize}
+  \end{itemize}
+  
 \end{frame}
-\begin{frame}
-  プロセスの非機能を隔離、監視\supercite{rdt}する
-  \frametitle{libcontainer.Container}
-  \begin{center}
-    \inputminted{go}{code/container2.go}
-    libcontainer.Container\supercite{libcontainer}
-  \end{center}
-\end{frame}
-\begin{frame}
-  コンテナで実行したいプロセスの情報がある
-  \frametitle{libcontainer.Container}
-  \begin{center}
-    \inputminted{go}{code/container3.go}
-    libcontainer.Container\supercite{libcontainer}
-  \end{center}
-\end{frame}
-\begin{frame}[t]
-  \frametitle{libcontainer.Container}
-  コンテナのチェックポイント、リストアのフィールドがある\supercite{criu}
-  \begin{center}
-    \inputminted{go}{code/container4.go}
-    libcontainer.Container\supercite{libcontainer}
-  \end{center}
-\end{frame}
+
+% \section{付録 コンテナの構造体}
+% \begin{frame}
+%   \frametitle{libcontainer.Container}
+%   フィールドは非公開
+%   \begin{columns}
+%     \begin{column}{0.5\textwidth}
+%       \begin{center}
+%         \inputminted{go}{code/container.go}
+%         libcontainer.Container\supercite{libcontainer}
+%       \end{center}
+%     \end{column}
+%     \begin{column}{0.5\textwidth}
+%       \begin{itemize}[leftmargin=0.2cm,label=$\circ$]
+%         \item \texttt{stateDir}は\texttt{runc}の\texttt{--root}オプション\texttt{<dir>}とすると\texttt{<dir>/<id>}
+%         \item \texttt{stateDir}には\texttt{run init}を呼びだす \texttt{/proc/self/exe}の複製や名前つきパイプをおく
+%         \item \texttt{/proc/self/exe}は実行中のプログラムのパスのシンボリックリンク
+%       \end{itemize}
+%     \end{column}
+%   \end{columns}
+% \end{frame}
+% \begin{frame}
+%   プロセスの非機能を隔離、監視\supercite{rdt}する
+%   \frametitle{libcontainer.Container}
+%   \begin{center}
+%     \inputminted{go}{code/container2.go}
+%     libcontainer.Container\supercite{libcontainer}
+%   \end{center}
+% \end{frame}
+% \begin{frame}
+%   コンテナで実行したいプロセスの情報がある
+%   \frametitle{libcontainer.Container}
+%   \begin{center}
+%     \inputminted{go}{code/container3.go}
+%     libcontainer.Container\supercite{libcontainer}
+%   \end{center}
+% \end{frame}
+% \begin{frame}[t]
+%   \frametitle{libcontainer.Container}
+%   コンテナのチェックポイント、リストアのフィールドがある\supercite{criu}
+%   \begin{center}
+%     \inputminted{go}{code/container4.go}
+%     libcontainer.Container\supercite{libcontainer}
+%   \end{center}
+% \end{frame}
 \begin{frame}[allowframebreaks]
   \frametitle{参考資料}
   \printbibliography
