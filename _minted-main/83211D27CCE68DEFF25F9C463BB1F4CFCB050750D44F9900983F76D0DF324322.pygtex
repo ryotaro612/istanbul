@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/*}
+\PYG{c+cm}{\PYGZsh{}cgo CFLAGS: \PYGZhy{}Wall extern void nsexec(); void}
+\PYG{c+cm}{\PYGZlt{}中略\PYGZgt{} init(void) \PYGZob{} nsexec(); \PYGZcb{}}
+\PYG{c+cm}{*/}
+\PYG{k+kn}{import}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}C\PYGZdq{}}
+\end{Verbatim}

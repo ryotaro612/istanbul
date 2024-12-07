@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{type}\PYG{+w}{ }\PYG{n+nx}{Container}\PYG{+w}{ }\PYG{k+kd}{struct}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{	}\PYG{n+nx}{id}\PYG{+w}{ }\PYG{k+kt}{string}
+\PYG{+w}{	}\PYG{n+nx}{stateDir}\PYG{+w}{ }\PYG{k+kt}{string}
+\PYG{+w}{	}\PYG{n+nx}{config}\PYG{+w}{ }\PYG{k+kt}{*}\PYG{k+kt}{configs}\PYG{k+kt}{.}\PYG{k+kt}{Config}
+\PYG{+w}{	}\PYG{err}{\PYGZsh{}}\PYG{+w}{ }\PYG{n+nx}{後述}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

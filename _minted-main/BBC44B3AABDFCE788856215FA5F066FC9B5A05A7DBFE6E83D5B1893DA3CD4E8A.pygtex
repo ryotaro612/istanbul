@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nb}{cd}\PYG{+w}{ }rootfs\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }mkdir\PYG{+w}{ }put\PYGZus{}old
+\PYG{c+c1}{\PYGZsh{} 新しいマウントポイントの名前空間に移動}
+unshare\PYG{+w}{ }\PYGZhy{}mpfr\PYG{+w}{ }/bin/sh
+\PYG{c+c1}{\PYGZsh{} pivot\PYGZus{}rootの引数はマウントポイントでないとだめ}
+mount\PYG{+w}{ }\PYGZhy{}\PYGZhy{}bind\PYG{+w}{ }\PYG{k}{\PYGZdl{}(}\PYG{n+nb}{pwd}\PYG{k}{)}\PYG{+w}{ }\PYG{k}{\PYGZdl{}(}\PYG{n+nb}{pwd}\PYG{k}{)}
+\PYG{c+c1}{\PYGZsh{} put\PYGZus{}oldにもとのルートをおく。後でunmount可}
+pivot\PYGZus{}root\PYG{+w}{ }\PYG{k}{\PYGZdl{}(}\PYG{n+nb}{pwd}\PYG{k}{)}\PYG{+w}{ }\PYG{k}{\PYGZdl{}(}\PYG{n+nb}{pwd}\PYG{k}{)}/put\PYGZus{}old
+\end{Verbatim}

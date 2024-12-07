@@ -13,7 +13,6 @@ main.pdf
 *.vrb
 *.nav
 *.synctex.gz
-_minted-*
 *-SAVE-ERROR
 # Python
 venv
