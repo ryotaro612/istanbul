@@ -1,8 +1,8 @@
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nx}{f}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o}{:=}\PYG{+w}{ }\PYG{n+nx}{utils}\PYG{p}{.}\PYG{n+nx}{RecvFile}\PYG{p}{(}\PYG{n+nx}{socket}\PYG{p}{)}
+\PYG{n+nx}{f}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o+k}{:=}\PYG{+w}{ }\PYG{n+nx}{utils}\PYG{p}{.}\PYG{n+nx}{RecvFile}\PYG{p}{(}\PYG{n+nx}{socket}\PYG{p}{)}
 \PYG{c+c1}{// 中略 socketからマスタの記述子を取得}
 \PYG{k}{go}\PYG{+w}{ }\PYG{k+kd}{func}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
-\PYG{+w}{  }\PYG{n+nx}{\PYGZus{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{\PYGZus{}}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nx}{io}\PYG{p}{.}\PYG{n+nx}{Copy}\PYG{p}{(}\PYG{n+nx}{epollConsole}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{os}\PYG{p}{.}\PYG{n+nx}{Stdin}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n+nx}{\PYGZus{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{\PYGZus{}}\PYG{+w}{ }\PYG{p+k}{=}\PYG{+w}{ }\PYG{n+nx}{io}\PYG{p}{.}\PYG{n+nx}{Copy}\PYG{p}{(}\PYG{n+nx}{epollConsole}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{os}\PYG{p}{.}\PYG{n+nx}{Stdin}\PYG{p}{)}
 \PYG{p}{\PYGZcb{}()}
 \PYG{n+nx}{t}\PYG{p}{.}\PYG{n+nx}{wg}\PYG{p}{.}\PYG{n+nx}{Add}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}
 \PYG{k}{go}\PYG{+w}{ }\PYG{n+nx}{t}\PYG{p}{.}\PYG{n+nx}{copyIO}\PYG{p}{(}\PYG{n+nx}{os}\PYG{p}{.}\PYG{n+nx}{Stdout}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{epollConsole}\PYG{p}{)}

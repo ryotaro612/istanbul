@@ -1,11 +1,11 @@
 \begin{Verbatim}[commandchars=\\\{\}]
 mkdir\PYG{+w}{ }rootfs
-\PYG{c+c1}{\PYGZsh{} busyboxの/以下をrootfsにコピー}
-docker\PYG{+w}{ }\PYG{n+nb}{export}\PYG{+w}{ }\PYG{k}{\PYGZdl{}(}docker\PYG{+w}{ }create\PYG{+w}{ }busybox\PYG{k}{)}\PYG{+w}{ }\PYG{p}{|}\PYG{+w}{ }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{c+c1+k}{\PYGZsh{} busyboxの/以下をrootfsにコピー}
+docker\PYG{+w}{ }\PYG{n+nb}{export}\PYG{+w}{ }\PYG{k}{\PYGZdl{}(}docker\PYG{+w}{ }create\PYG{+w}{ }busybox\PYG{k}{)}\PYG{+w}{ }\PYG{p+k}{|}\PYG{+w}{ }\PYG{l+s+se+k}{\PYGZbs{}}
 tar\PYG{+w}{ }\PYGZhy{}C\PYG{+w}{ }rootfs\PYG{+w}{ }\PYGZhy{}xvf\PYG{+w}{ }\PYGZhy{}
-\PYG{c+c1}{\PYGZsh{} コンテナを起動するパラメタの雛形を./config.jsonに出力}
+\PYG{c+c1+k}{\PYGZsh{} コンテナを起動するパラメタの雛形を./config.jsonに出力}
 runc\PYG{+w}{ }spec
-\PYG{c+c1}{\PYGZsh{} コンテナIDをcidとしてコンテナを起動}
+\PYG{c+c1+k}{\PYGZsh{} コンテナIDをcidとしてコンテナを起動}
 runc\PYG{+w}{ }\PYGZhy{}\PYGZhy{}root\PYG{+w}{ }/tmp/runc\PYG{+w}{ }run\PYG{+w}{ }cid
-\PYG{c+c1}{\PYGZsh{} /bin/shを実行中のコンテナにアタッチ}
+\PYG{c+c1+k}{\PYGZsh{} /bin/shを実行中のコンテナにアタッチ}
 \end{Verbatim}

@@ -206,20 +206,21 @@
 \end{frame}
 \section{伝えたかったこと}
 \begin{frame}[t]
-  \frametitle{実装とPlumbling Manifestoをくらべて}
+  \frametitle{実装とPlumbling Manifestoを▽ふりかえって}
   \large
   コンテナの基礎の実装に特別なからくりはない
   \normalsize
   \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
   \item 標準のインターフェース
     \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
-    \item 端末, 名前空間、マウントは違うものだが、すべて\texttt{/proc}下にファイル(\texttt{ns}, \texttt{fd}, \texttt{mounts})として状態が示されている
+    \item 端末, 名前空間、マウントは互いに異質だが、どれも\texttt{/proc}下のディレクトリ(\texttt{ns}, \texttt{fd}, \texttt{mounts})にファイルとして、その状態が公開されている
     \item ファイル開き、返った記述子を関数に渡して操作できる
     \end{itemize}
   \item 小さな機能の組合せ
     \begin{itemize}[leftmargin=0.8cm,label=$\circ$]
       \item コンテナに用途を限らない機能で実装されている
-      \footnote{\texttt{clone}の\texttt{CLONE\_NEWIPC}などコンテナのために用意された機能も一部ある\supercite{clone}}
+        \footnote{\texttt{clone}の\texttt{CLONE\_NEWIPC}などコンテナのために用意された機能も一部ある\supercite{clone}}
+      \item \texttt{runc}自体も抽象度の高いAPIから組合せられて使われる
     \end{itemize}
   \end{itemize}  
 \end{frame}

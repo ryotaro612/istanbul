@@ -1,8 +1,8 @@
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nx}{pty}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{slavePath}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o}{:=}\PYG{+w}{ }\PYG{n+nx}{console}\PYG{p}{.}\PYG{n+nx}{NewPty}\PYG{p}{()}
+\PYG{n+nx}{pty}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{slavePath}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o+k}{:=}\PYG{+w}{ }\PYG{n+nx}{console}\PYG{p}{.}\PYG{n+nx}{NewPty}\PYG{p}{()}
 \PYG{c+c1}{// 中略}
-\PYG{k}{if}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o}{:=}\PYG{+w}{ }\PYG{n+nx}{utils}\PYG{p}{.}\PYG{n+nx}{SendRawFd}\PYG{p}{(}
-\PYG{+w}{  }\PYG{n+nx}{socket}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{pty}\PYG{p}{.}\PYG{n+nx}{Name}\PYG{p}{(),}\PYG{+w}{ }\PYG{n+nx}{pty}\PYG{p}{.}\PYG{n+nx}{Fd}\PYG{p}{());}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{k+kc}{nil}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{k}{if}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o+k}{:=}\PYG{+w}{ }\PYG{n+nx}{utils}\PYG{p}{.}\PYG{n+nx}{SendRawFd}\PYG{p}{(}
+\PYG{+w}{  }\PYG{n+nx}{socket}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{pty}\PYG{p}{.}\PYG{n+nx}{Name}\PYG{p}{(),}\PYG{+w}{ }\PYG{n+nx}{pty}\PYG{p}{.}\PYG{n+nx}{Fd}\PYG{p}{());}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o+k}{!=}\PYG{+w}{ }\PYG{k+kc}{nil}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
 \PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{n+nx}{err}
 \PYG{p}{\PYGZcb{}}
 \end{Verbatim}

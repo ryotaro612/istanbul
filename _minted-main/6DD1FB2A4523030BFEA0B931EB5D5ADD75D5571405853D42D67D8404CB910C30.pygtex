@@ -1,7 +1,7 @@
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nx}{fd}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o}{:=}\PYG{+w}{ }\PYG{n+nx}{unix}\PYG{p}{.}\PYG{n+nx}{Open}\PYG{p}{(}\PYG{n+nx}{slavePath}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{unix}\PYG{p}{.}\PYG{n+nx}{O\PYGZus{}RDWR}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}
+\PYG{n+nx}{fd}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o+k}{:=}\PYG{+w}{ }\PYG{n+nx}{unix}\PYG{p}{.}\PYG{n+nx}{Open}\PYG{p}{(}\PYG{n+nx}{slavePath}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{unix}\PYG{p}{.}\PYG{n+nx}{O\PYGZus{}RDWR}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)}
 \PYG{c+c1}{// 中略}
-\PYG{k}{for}\PYG{+w}{ }\PYG{n+nx}{\PYGZus{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{i}\PYG{+w}{ }\PYG{o}{:=}\PYG{+w}{ }\PYG{k}{range}\PYG{+w}{ }\PYG{p}{[]}\PYG{k+kt}{int}\PYG{p}{\PYGZob{}}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
-\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o}{:=}\PYG{+w}{ }\PYG{n+nx}{unix}\PYG{p}{.}\PYG{n+nx}{Dup3}\PYG{p}{(}\PYG{n+nx}{fd}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{i}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{k+kc}{nil}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{k}{for}\PYG{+w}{ }\PYG{n+nx}{\PYGZus{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{i}\PYG{+w}{ }\PYG{o+k}{:=}\PYG{+w}{ }\PYG{k}{range}\PYG{+w}{ }\PYG{p}{[]}\PYG{k+kt}{int}\PYG{p}{\PYGZob{}}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o+k}{:=}\PYG{+w}{ }\PYG{n+nx}{unix}\PYG{p}{.}\PYG{n+nx}{Dup3}\PYG{p}{(}\PYG{n+nx}{fd}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{i}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o+k}{!=}\PYG{+w}{ }\PYG{k+kc}{nil}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
 \PYG{+w}{	  }\PYG{k}{return}\PYG{+w}{ }\PYG{n+nx}{err}
 \end{Verbatim}

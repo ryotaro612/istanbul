@@ -1,5 +1,5 @@
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{k}{if}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o}{:=}\PYG{+w}{ }\PYG{n+nx}{unix}\PYG{p}{.}\PYG{n+nx}{IoctlSetInt}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{unix}\PYG{p}{.}\PYG{n+nx}{TIOCSCTTY}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{k+kc}{nil}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{k}{if}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o+k}{:=}\PYG{+w}{ }\PYG{n+nx}{unix}\PYG{p}{.}\PYG{n+nx}{IoctlSetInt}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{unix}\PYG{p}{.}\PYG{n+nx}{TIOCSCTTY}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{);}\PYG{+w}{ }\PYG{n+nx}{err}\PYG{+w}{ }\PYG{o}{!=}\PYG{+w}{ }\PYG{k+kc}{nil}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
 \PYG{+w}{  }\PYG{k}{return}\PYG{+w}{ }\PYG{n+nx}{err}
 \PYG{p}{\PYGZcb{}}
 \end{Verbatim}
